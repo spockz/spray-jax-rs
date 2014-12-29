@@ -17,3 +17,5 @@ libraryDependencies += "io.spray"      %% "spray-testkit"   % "1.3.1" % "test"
 //libraryDependencies += "org.scalatest" %% "scalatest"       % "2.2.1" % "test"
 
 libraryDependencies += "org.specs2"    %% "specs2"          % "2.3.13" % "test"
+
+libraryDependencies += "org.scala-lang" % "scala-reflect"   % scalaVersion.value

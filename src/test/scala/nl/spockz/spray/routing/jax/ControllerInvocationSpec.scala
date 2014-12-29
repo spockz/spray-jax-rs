@@ -1,6 +1,7 @@
 package nl.spockz.spray.routing.jax
 
 import nl.spockz.spray.routing.jax.java.ControllerInvocationController
+import spray.routing.Route
 
 /**
  * Test class for testing whether the controller methods are called with
@@ -11,9 +12,8 @@ class ControllerInvocationSpec extends RoutingSpec {
   "the resolver" should {
     "successfully call a single method" in {
       val converter = new SimpleConverter {
-
       }
-      val route = converter.classesToRoute(Seq(classOf[ControllerInvocationController]))
+      val route = converter.routeTreeToRoute(converter.classToRouteTree(classOf[ControllerInvocationController]))
       Get() ~> route ~> check {
         responseAs[String] must contain("Say hello")
       }
