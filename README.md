@@ -1,5 +1,7 @@
 spray-jax-rs
 ============
+[![Code Climate](https://codeclimate.com/github/spockz/spray-jax-rs/badges/gpa.svg)](https://codeclimate.com/github/spockz/spray-jax-rs)
+
 # Overview
 
 Spray JAX-RS is designed to create Spray routes from JAX-RS annotations placed on classes and methods used in a specific package.
