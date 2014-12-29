@@ -6,9 +6,13 @@ scalaVersion := "2.11.4"
 
 scalacOptions := Seq("-deprecation")
 
-libraryDependencies += "javax.ws.rs"    % "javax.ws.rs-api" % "2.0.1"
+libraryDependencies += "javax.ws.rs"    % "javax.ws.rs-api" % "2.0"
 
-libraryDependencies += "com.typesafe.akka"                       %%  "akka-actor"                  % "2.3.6" //% "provided"
+
+// TODO: Get rid of this dependency, without it the code breaks on missing Symbols for Cookie
+libraryDependencies += "org.glassfish.jersey.core"    % "jersey-common" % "2.14" % "provided"
+
+libraryDependencies += "com.typesafe.akka"                       %%  "akka-actor"                  % "2.3.6" % "provided"
 
 libraryDependencies += "io.spray"      %% "spray-routing"   % "1.3.1"
 

@@ -21,32 +21,24 @@ trait SimpleConverter extends Converter {
 
   import SimpleConverter._
 
-  def packageToClasses[T : TypeTag](packageName: String): ApplicationClasses = ???
+  def packageToClasses[T: TypeTag](packageName: String): ApplicationClasses = ???
 
-  def classesToRoute[T : TypeTag](classes: ApplicationClasses): Route = {
+  def classesToRoute[T: TypeTag](classes: ApplicationClasses): Route = {
     println(implicitly[TypeTag[T]])
     routeTreeToRoute(classesToRouteTree(classes))
   }
-
-
   //    classesToRouteTree andThen routeTreeToRoute
 
-  /*** To internal representation ***/
+  /** * To internal representation ***/
 
-  def classesToRouteTree[T : TypeTag](classes: ApplicationClasses): RouteTree =
-  {
+  def classesToRouteTree[T: TypeTag](classes: ApplicationClasses): RouteTree = {
     println(implicitly[TypeTag[T]])
     Node(List.empty, classes.map(clazz => classToRouteTree(clazz)).toList)
   }
 
-  def classToRouteTree[T: TypeTag: ClassTag](clazz: Class[T]): RouteTree = {
-    val tpe : Type = typeOf[T]
-    println("classToRouteTree", implicitly[TypeTag[T]])
-    tpe.members.foreach { m =>
-      println(m.name)
-    }
-    println("classToRouteTree-end", implicitly[TypeTag[T]])
-    Node(Seq.empty, tpe.members.filter(m => m.isMethod && m.isPublic && m.annotations.nonEmpty).map { decl =>
+  def classToRouteTree[T: TypeTag : ClassTag](clazz: Class[T]): RouteTree = {
+    val tpe: Type = typeOf[T]
+    Node(Seq.empty, tpe.members.filter(isControllerMethod).map { decl =>
       Node(decl.annotations, List(methodToRouteTree(tpe, decl.asMethod)))
     }.asInstanceOf[List[RouteTree]])
   }
@@ -55,17 +47,17 @@ trait SimpleConverter extends Converter {
     complete {
       // ToDo: Create param  matchers here?
       val params = List.empty
-      val controller : T = createInstance[T](params)(0)
+      val controller: T = createInstance[T](params)(0)
       println(method.name)
       val response = currentMirror.reflect(controller).reflectMethod(method).apply()
       response match {
-        case res : Response => wsrsToSpray(res)
-        case _                            => "err"
+        case res: Response => wsrsToSpray(res)
+        case _ => "err"
       }
     }
   }
 
-  /*** To route ***/
+  /** * To route ***/
 
   def routeTreeToRoute(routeTree: RouteTree): Route = routeTree match {
     case Node(annotations, subTree) =>
@@ -73,16 +65,21 @@ trait SimpleConverter extends Converter {
     case Leaf(route) => route
   }
 
-  private def createInstance[T : TypeTag](args: AnyRef*)(ctor: Int = 0): T = {
+  private def createInstance[T: TypeTag](args: AnyRef*)(ctor: Int = 0): T = {
     val tt = typeTag[T]
     println(tt)
     currentMirror.reflectClass(tt.tpe.typeSymbol.asClass).reflectConstructor({
-      println(tt.tpe.members.count(m => m.isMethod && m.asMethod.isConstructor))
       tt.tpe.members.filter(m =>
         m.isMethod && m.asMethod.isConstructor
       ).iterator.toSeq(ctor).asMethod
     })(args: _*).asInstanceOf[T]
   }
+
+  /**
+   * A method is a controller method when it returns a jax-rs Response.
+   */
+  private def isControllerMethod(method: Symbol): Boolean =
+    method.isMethod && method.asMethod.returnType <:< typeOf[Response]
 }
 
 object SimpleConverter {
@@ -94,10 +91,10 @@ object SimpleConverter {
   case class Leaf(controller: Route) extends RouteTree
 
 
-  def wsrsToSpray(wsResponse: Response) : HttpResponse =
+  def wsrsToSpray(wsResponse: Response): HttpResponse =
     HttpResponse(status = wsResponse.getStatus, entity = HttpEntity(wsResponse.getEntity.toString), getHeaderList(wsResponse.getStringHeaders))
 
-  def getHeaderList(headers: MultivaluedMap[String, String]) : List[HttpHeader] =
+  def getHeaderList(headers: MultivaluedMap[String, String]): List[HttpHeader] =
     for {
       entry <- headers.entrySet.asScala.toList
       key = entry.getKey

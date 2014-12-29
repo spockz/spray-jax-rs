@@ -15,7 +15,7 @@ class ControllerInvocationSpec extends RoutingSpec {
       }
       val route = converter.routeTreeToRoute(converter.classToRouteTree(classOf[ControllerInvocationController]))
       Get() ~> route ~> check {
-        responseAs[String] must contain("Say hello")
+        responseAs[String] must beEqualTo("Hello World!")
       }
     }
   }
