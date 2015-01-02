@@ -5,6 +5,8 @@ spray-jax-rs
 # Overview
 
 Spray JAX-RS is designed to create Spray routes from JAX-RS annotations placed on classes and methods used in a specific package.
+At this point supporting filters and interceptors, as well as performing DI is not in scope. This functionality is reserved for
+a later time or different packages.
 
 The usage is as follows:
 
