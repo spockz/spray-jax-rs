@@ -17,6 +17,15 @@ val myRoute = fromJaxAnnotation("some.package.name")
 
 # Supported Annotations
 
+* DELETE
+* GET
+* HEAD
+* HttpMethod
+* OPTIONS
+* POST
+* PUT
+
+
 # Unsupported Annotations
 * ApplicationPath
 * BeanParam
@@ -24,19 +33,12 @@ val myRoute = fromJaxAnnotation("some.package.name")
 * Consumes
 * CookieParam
 * DefaultValue
-* DELETE
 * Encoded
 * FormParam
-* GET
-* HEAD
 * HeaderParam
-* HttpMethod
 * MatrixParam
 * NameBinding
-* OPTIONS
 * Path
 * PathParam
-* POST
 * Produces
-* PUT
 * QueryParam
