@@ -11,6 +11,8 @@ public class ControllerInvocationController {
 
     }
 
+    @GET
+    @Deprecated
     public Response doSomething() {
         System.out.println("doSomething is called!");
         return Response.ok("Hello World!").build();

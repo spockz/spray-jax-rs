@@ -1,7 +1,6 @@
 package nl.spockz.spray.routing.jax
 
 import nl.spockz.spray.routing.jax.java.ControllerInvocationController
-import spray.routing.Route
 
 /**
  * Test class for testing whether the controller methods are called with
