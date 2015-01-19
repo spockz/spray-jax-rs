@@ -1,6 +1,6 @@
 spray-jax-rs
 ============
-[![Code Climate](https://codeclimate.com/github/spockz/spray-jax-rs/badges/gpa.svg)](https://codeclimate.com/github/spockz/spray-jax-rs)
+![Code Ship](https://codeship.com/projects/98035900-81fb-0132-b737-2e1fa562aa85/status?branch=master)
 
 # Overview
 
